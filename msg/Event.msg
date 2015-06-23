@@ -1,0 +1,4 @@
+uint8 event_type
+uint8 event_id
+string query_message
+JUDPMessage create_message

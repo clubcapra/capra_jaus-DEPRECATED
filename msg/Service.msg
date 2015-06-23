@@ -1,0 +1,3 @@
+string uri
+uint8 major_version_number
+uint8 minor_version_number

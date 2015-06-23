@@ -1,0 +1,10 @@
+uint8 event_id
+uint8 request_id
+uint8 event_type
+uint16 requested_rate
+string query_message
+JUDPMessage sender_info
+---
+bool is_accepted
+ConfirmEventRequest confirmed_event_request
+RejectEventRequest rejected_event_request

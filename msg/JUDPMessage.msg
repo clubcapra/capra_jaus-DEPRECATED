@@ -1,0 +1,9 @@
+uint8 version
+uint8 type_hc
+uint16 size
+uint8 pbad_flags
+uint32 destination_id
+uint32 source_id
+uint16 message_code
+uint8[] data
+uint16 sequence_number

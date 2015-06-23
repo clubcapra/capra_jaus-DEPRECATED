@@ -1,0 +1,4 @@
+uint16 code
+string query_message
+---
+uint8 valid_code

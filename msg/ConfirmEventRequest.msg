@@ -1,0 +1,3 @@
+uint8 request_id
+uint8 event_id
+uint16 confirmed_rate
