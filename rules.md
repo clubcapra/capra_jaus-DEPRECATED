@@ -40,8 +40,8 @@ Messages passed between the COP and the team entries will include data as descri
 For any two elements in the system to communicate meaningful data there must first be a handshake to ensure both sides use the same protocols and are willing participants in the interaction.  For the sake of simplicity, the team’s entry shall initiate the discovery protocol with the Judge’s COP, and the IP address and JAUS ID of the COP shall be fixed.  The IP address and JAUS ID of the Judge’s COP are defined as:
 
 
-|COP IP ADDRESS:|192.168.1.42:3794|
-|COP JAUS ID:|42-1-1 (Subsystem-Node-Component)|
+|COP IP ADDRESS|COP JAUS ID|
+|192.168.1.42:3794|42-1-1 (Subsystem-Node-Component)|
 
 The discovery process, in Discovery and System Management Figure, will occur at the application layer. The student team’s JAUS element will send a request for identification to the COP once every 5 seconds. The COP will respond with the appropriate informative message and request identification in return from the team’s JAUS interface. After the identification report from the COP, the team entry will stop repeating the request. This transaction will serve as the basic discovery between the two elements.
 
@@ -51,7 +51,8 @@ The discovery process, in Discovery and System Management Figure, will occur at 
 ![DSM](http://www.igvc.org/rules_files/image012.jpg)
 *Discovery and System Management*
 
-The following table shows the messages sent from the COP to the team’s entry, along with the expected response and minimal required fields to be set using the presence vector (PV) if applicable, required to complete this portion of the challenge:
+The following table shows the messages sent from the COP to the team’s entry, along with the expected response and minimal required fields to be set using the presence vector (PV) if applicable, required to complete this portion of the challenge
+
 
 
 |Input Messages|Expected Response|Required Fields (PV)|
