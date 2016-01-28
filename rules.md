@@ -48,7 +48,7 @@ The discovery process, in Discovery and System Management Figure, will occur at 
 
   The COP software will be programmed with the assumption that all services required by the specific competition are provided at the single JAUS ID. Furthermore, as per the AS5669A Specification, the team’s entry shall receive JUDP traffic at the same IP address and port number that initiated the discovery protocol. Teams should note that this is different from common UDP programming approaches in which the outbound port for sent messages is not bound.
 
-![DSM][http://www.igvc.org/rules_files/image012.jpg]
+![DSM](http://www.igvc.org/rules_files/image012.jpg)
 *Discovery and System Management*
 
 The following table shows the messages sent from the COP to the team’s entry, along with the expected response and minimal required fields to be set using the presence vector (PV) if applicable, required to complete this portion of the challenge:
