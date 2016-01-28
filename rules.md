@@ -41,6 +41,7 @@ For any two elements in the system to communicate meaningful data there must fir
 
 
 |COP IP ADDRESS|COP JAUS ID|
+|----|----|
 |192.168.1.42:3794|42-1-1 (Subsystem-Node-Component)|
 
 The discovery process, in Discovery and System Management Figure, will occur at the application layer. The student team’s JAUS element will send a request for identification to the COP once every 5 seconds. The COP will respond with the appropriate informative message and request identification in return from the team’s JAUS interface. After the identification report from the COP, the team entry will stop repeating the request. This transaction will serve as the basic discovery between the two elements.
@@ -65,6 +66,7 @@ The following table shows the messages sent from the COP to the team’s entry, 
 Following the completion of the Transport Discovery handshake the COP will query the entry for its capabilities. The Query Services message and Report Services message are defined in the AS5710 document and require the inheritance of the Transport service. The COP will send a Query Services message to a student team entry. Upon receipt of the message the student team entry shall respond with a properly formed Report Services message.
 
   The following table shows the messages sent from the COP to the team’s entry, along with the expected response and minimal required fields to be set using the presence vector (PV) if applicable, required to complete this portion of the challenge:
+ 
 |Input Messages|Expected Response|Required Fields (PV)|
 |----|----|----|
 |Query Identification|Report Identification|N/A|
