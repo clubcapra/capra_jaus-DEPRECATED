@@ -1,7 +1,7 @@
 <launch>
 
   <node pkg="capra_jaus" name="jaus_agent" type="jaus_agent.py" output="screen">
-    <param name="judge_server_address" value="192.168.0.110"/> <!-- 192.168.1.42 -->
+    <param name="judge_server_address" value="192.168.1.140"/> <!-- 192.168.1.42 -->
     <param name="judge_server_port" value="3794"/> <!-- 3794 -->
     <param name="jaus_agent_address" value=""/> <!-- 192.168.1.105 -->
     <param name="jaus_agent_port" value="3794"/>

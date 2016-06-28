@@ -1,0 +1,175 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import socket
+import sys
+from JUDP_Mixbo import JUDPMessage
+
+GREEN = "\x1B[32m"
+RED = "\x1B[31m"
+YELLOW = "\x1B[33m"
+DEFAULT = "\x1B[39m"
+
+def good(msg):
+    print '['+GREEN+'+'+DEFAULT+'] '+msg
+
+def bad(msg):
+    print '['+RED+'-'+DEFAULT+'] '+msg
+
+def info(msg):
+    print '['+YELLOW+'!'+DEFAULT+'] '+msg
+def usage():
+    cmds = ["QueryStatus","Standby" ,"Resume" ,"Reset" ,"Shutdown" ,"SetEmergency" ,"ClearEmergency" ,"RequestControl" ,"ReleaseControl" ,"QueryControl" ,"QueryAuthority" ,"QueryTimeout","SetAuthority"]
+    print "Usage:"
+    print "$ ./mixbo.py <Addresse du robot> <Commande>"
+    print "Command list:"
+    for cmd in cmds:
+        print '\t'+cmd
+    exit(0)
+
+"""
+Les tests doivent se faire sur 2 machines séparées, car les 2 ont besoin du port 3794.
+Ce script simule les commandes envoyees par Dr. JAUS
+
+Usage:
+$ ./mixbo.py <Addresse du robot> <Commande>
+
+Assurez vous que l'addresse "judge_server_address" du launchfile de robot correspond
+a cet ordinateur, sinon, on va wait indefiniment ;)
+"""
+
+client_ip = '192.168.0.123' #Robot
+#server_ip = '192.168.0.110' #Running that script
+server_ip = '192.168.1.138'
+message = False
+
+has_response = True
+if len(sys.argv) > 2:
+    client_ip = sys.argv[1]
+    msg_name = sys.argv[2]
+
+    if msg_name == 'QueryStatus':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x02\x20\xe0\x09'
+    elif msg_name == 'Standby':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x03\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'Resume':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x04\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'Reset':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x05\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'Shutdown':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x02\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'SetEmergency':
+        message = '\x02\x00\x12\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x06\x00\x01\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'ClearEmergency':
+        message = '\x02\x00\x12\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x07\x00\x01\x00\xe0\x09'
+        has_response = False
+    elif msg_name == 'RequestControl':
+        message = '\x02\x00\x11\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x0d\x00\x05\xe0\x09' #request control with authority 5
+        has_response = True
+    elif msg_name == 'ReleaseControl':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x0e\x00\xe0\x09'
+        has_response = True
+    elif msg_name == 'QueryControl':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x0d\x20\xe0\x09'
+        has_response = True
+    elif msg_name == 'QueryAuthority':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x01\x20\xe0\x09'
+        has_response = True
+    elif msg_name == 'QueryTimeout':
+        message = '\x02\x00\x10\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x03\x20\xe0\x09'
+        has_response = True
+    elif msg_name == 'SetAuthority':
+        message = '\x02\x00\x11\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x01\x00\x07\xe0\x09' #setting authority to 7
+        has_response = False
+    elif msg_name == 'QueryHeartbeatPulse':
+        message = '\x02\x00\x12\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\x02\x22\x01\x00\xe0\x09'
+        has_response = True
+    elif msg_name == 'QueryEvents':
+        message = '\x02\x00\x12\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\xf0\x21\x01\x00\xe0\x09'
+        has_response = True
+    elif msg_name == 'CreateEvents':
+        message = '\x02\x00\x12\x00\x01\xff\xff\xff\xff\x01\x01\x2a\x00\xf0\x01\x01\x00\xe0\x09'
+        has_response = True
+else:
+	usage()
+
+if message:
+	good(GREEN+'Addresse du robot: '+RED+client_ip+DEFAULT)
+	good(GREEN+'Addresse du serveur (cet ordinateur): '+RED+server_ip+DEFAULT)
+	good(GREEN+'Commande envoyee (msg_name):'+DEFAULT+msg_name)
+	good(GREEN+'Parametre (message)'+DEFAULT+message)
+else:
+	bad("Message invalide")
+	exit(1)
+
+# Create a UDP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+sock.settimeout(5)
+try:
+    sock.bind((server_ip, 3794))
+except:
+    bad("Peut pas bind. Es-tu certain d'etre sur le bon subnet et binder le bon ip?")
+    exit(1)
+
+robot_address = (client_ip, 3794)
+
+# 0: Version
+# 1: type_hc
+# 2: size
+# 3: size
+# 4: pbad_flags
+# 5: destination component id
+# 6: destination node id
+# 7: destination subsystem id
+# 8: destination system id
+# 9: source component id
+# 10: source node id
+# 11: source subsystem id
+# 12: source component id
+# 13: message_type
+# 14: message_type
+# 15: data
+# ...: data
+# -2: sequence_number
+# -1: sequence_number
+
+
+Node_cout = 1
+node_id = 1
+component_count = 2
+component_id = 1
+component_id = 2
+
+try:
+    # Send data
+    good("Sending '"+message+"'")
+
+    good('Sending (hex) \'%s' % ":".join("{:02x}".format(ord(c)) for c in message)+"'")
+    sent = sock.sendto(message, robot_address)
+    
+    if has_response:
+        # Receive response
+        good('Waiting for answer...')
+        data, server = sock.recvfrom(4096)
+        good("Received '%s'" % data)
+        good("Received (hex) '%s'" % ":".join("{:02x}".format(ord(c)) for c in data))
+	good("Received (parsed):")
+
+        input_judp_message = JUDPMessage()
+        input_judp_message.parse(data)
+	for line in input_judp_message.__str__().split("\n"):
+	    good(line)
+
+except socket.timeout:
+    bad("La connexion a timeout. Le robot possede-t-il notre bonne ip?")
+except:
+    bad("An error occured")
+
+finally:
+    info('Closing socket')
+    sock.close()
